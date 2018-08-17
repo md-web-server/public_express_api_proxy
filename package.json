@@ -1,0 +1,11 @@
+{
+  "name": "projectFrankenstien",
+  "version": "1.0.0",
+  "description": "tools so you can make your own monster!",
+  "main": "exclusionLogic.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "author": "Michael Dimmitt",
+  "license": "MIT"
+}
