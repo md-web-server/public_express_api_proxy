@@ -1,32 +1,39 @@
-// https://codeforgeek.com/2015/01/render-html-file-expressjs/
-var express = require("express");
-var expressApp = express();
-var axios = require("axios");
-const port = 3005;
-const urlArray = [ 'https://github.com/MichaelDimmitt/gh_reveal/commit/03b735983ad0b05d3f66f908b2ffda47012b16e8' ]
+  var app = require("express")();
+  var axios = require("axios");
+  const port = 3005;
 
-async function server() {
-  rootRoute(expressApp)
-  portNum(expressApp)
-}
-server();
+  app.listen(port)
+  console.log("Running at Port", port)
 
-function rootRoute(app){
-  app.get('/', async function(req,res) {
-    const networkRequest = axios.get(urlArray[0]);
-    foo(await networkRequest);
-    res.send(`
-      <html><body><h1>My Server</h1></body></html>
-      ${(await networkRequest).data}`
-    )
+  // '/https://*' is the example, do not implement will cause duplicate request.
+  // app.get('/https://*', function(req,res) {
+  //   accessExternalWebsite(req,res)
+  // }); 
+  app.get('/https://github.com/*', function(req,res) {
+    return makeRequest(req, res)
+      .catch((e) => console.log('error: ' + e))
   });
-}
+  app.get('/https://ctftime.org/*', function(req,res) {
+    return makeRequest(req, res)
+      .catch((e) => console.log('error: ' + e))
+  });
+  app.get('/https://facebook.com/*', function(req,res) {
+    return makeRequest(req, res)
+      .catch((e) => console.log('error: ' + e))
+  });
+  app.get('/https://twitter.com/*', function(req,res) {
+    return makeRequest(req, res)
+    .catch((e) => console.log('error: ' + e))
+  }); 
 
-function portNum(app){
-  app.listen(port);
-  console.log("Running at Port", port);
-}
+  async function makeRequest(req, res){
+    const url = buildURL(req)
+    const networkRequest = axios.get(url)
+    return res.send(`${(await networkRequest).data}`)
+  }
 
-function foo({data}) {
-  console.log('DATA',data,'DATA');
-}
+  function buildURL(req){
+    // strip the '/' that comes with a local host request 
+    // and surround the url string with single quotes.
+    return req.url.substring(1)
+  }
