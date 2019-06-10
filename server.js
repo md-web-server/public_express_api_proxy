@@ -5,6 +5,12 @@
   app.listen(port)
   console.log("Running at Port", port)
 
+  app.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+  });
+
   // '/https://*' is the example, do not implement will cause duplicate request.
   // app.get('/https://*', function(req,res) {
   //   accessExternalWebsite(req,res)
